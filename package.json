@@ -1,0 +1,24 @@
+{
+  "name": "jameschangcompany.com",
+  "version": "1.0.0",
+  "description": "Source code for personal website at jameschangcompany.com",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate": "cpy src/ dist/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/big213/jameschangcompany.com.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/big213/jameschangcompany.com/issues"
+  },
+  "homepage": "https://github.com/big213/jameschangcompany.com#readme",
+  "devDependencies": {
+    "cpy-cli": "^3.1.1"
+  }
+}
