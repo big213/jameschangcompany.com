@@ -1,5 +1,8 @@
 import fs from "fs";
 import prettier from "prettier";
+import config from "../src/config";
+
+const pagesMap = <any>config.pages;
 
 // parses templateString and replaces with any params
 function processTemplate(
@@ -38,7 +41,9 @@ function processTemplate(
   });
 
   // get all of the page files
-  const pageFiles = fs.readdirSync("./src/pages");
+  const pageFiles = fs
+    .readdirSync("./src/pages")
+    .filter((e) => e.match(/\.html$/));
 
   // create the /dist dir if it doesn't exist
   if (!fs.existsSync("./dist")) {
@@ -47,15 +52,25 @@ function processTemplate(
 
   // loop through each
   for (const pageFile of pageFiles) {
-    // fetch the file contents
-    const pageData = require(`../src/pages/${pageFile}`).default;
+    const pageName = pageFile.replace(/\.html$/, "");
+
+    // fetch the page metadata
+    const pageMetadata = pagesMap[pageName];
+
+    // fetch the html content
+    const htmlData = fs.readFileSync(`./src/pages/${pageName}.html`, {
+      encoding: "utf-8",
+    });
 
     // generate the page by replacing any template variables, and write it to dist
     fs.writeFileSync(
-      `./dist/${pageFile.replace(/\.ts$/, ".html")}`,
-      await prettier.format(processTemplate(layoutFile, pageData), {
-        parser: "html",
-      })
+      `./dist/${pageName}.html`,
+      await prettier.format(
+        processTemplate(layoutFile, { content: htmlData, ...pageMetadata }),
+        {
+          parser: "html",
+        }
+      )
     );
   }
 })();
